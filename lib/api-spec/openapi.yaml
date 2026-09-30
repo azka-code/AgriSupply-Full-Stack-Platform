@@ -3,20 +3,23 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: AgriSupply cold-chain operations API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
-    description: Health operations
+  - name: auth
+  - name: dashboard
+  - name: orders
+  - name: shipments
+  - name: alerts
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +27,423 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /auth/signup:
+    post:
+      operationId: signup
+      tags: [auth]
+      summary: Create a new organization and its warehouse administrator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupInput"
+      responses:
+        "201":
+          description: Account created and signed in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
+        "400":
+          description: Invalid or duplicate email
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Sign in with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Signed in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
+        "401":
+          description: Invalid email or password
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Sign out
+      responses:
+        "200":
+          description: Signed out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /auth/me:
+    get:
+      operationId: getCurrentUser
+      tags: [auth]
+      summary: Get the signed-in user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Sign in required
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get organization dashboard totals and recent activity
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+        "401":
+          description: Sign in required
+  /orders:
+    get:
+      operationId: listOrders
+      tags: [orders]
+      summary: List tenant-scoped orders
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1, default: 1 }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+        - name: search
+          in: query
+          schema: { type: string, maxLength: 100 }
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/OrderStatus"
+      responses:
+        "200":
+          description: Order page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderPage"
+        "401":
+          description: Sign in required
+    post:
+      operationId: createOrder
+      tags: [orders]
+      summary: Create an order in the signed-in user's organization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderInput"
+      responses:
+        "201":
+          description: Created order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  /orders/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer, minimum: 1 }
+    get:
+      operationId: getOrder
+      tags: [orders]
+      summary: Get one tenant-scoped order
+      responses:
+        "200":
+          description: Order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: Order not found
+    patch:
+      operationId: updateOrder
+      tags: [orders]
+      summary: Update an order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderUpdate"
+      responses:
+        "200":
+          description: Updated order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+    delete:
+      operationId: deleteOrder
+      tags: [orders]
+      summary: Delete an order
+      responses:
+        "200":
+          description: Deleted order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /orders/{id}/status:
+    patch:
+      operationId: updateOrderStatus
+      tags: [orders]
+      summary: Move an order through an allowed workflow transition
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer, minimum: 1 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderStatusInput"
+      responses:
+        "200":
+          description: Updated order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "409":
+          description: Transition not allowed
+  /shipments:
+    get:
+      operationId: listShipments
+      tags: [shipments]
+      summary: List tenant-scoped shipments
+      parameters:
+        - name: search
+          in: query
+          schema: { type: string, maxLength: 100 }
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/OrderStatus"
+      responses:
+        "200":
+          description: Shipments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Shipment"
+        "401":
+          description: Sign in required
+    post:
+      operationId: createShipment
+      tags: [shipments]
+      summary: Assign an order to a shipment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShipmentInput"
+      responses:
+        "201":
+          description: Shipment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shipment"
+  /alerts:
+    get:
+      operationId: listAlerts
+      tags: [alerts]
+      summary: List recent sensor and operations alerts
+      responses:
+        "200":
+          description: Alerts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alert"
+        "401":
+          description: Sign in required
+  /alerts/{id}/ack:
+    post:
+      operationId: acknowledgeAlert
+      tags: [alerts]
+      summary: Acknowledge an alert
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: Acknowledged alert
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alert"
 components:
   schemas:
     HealthStatus:
       type: object
       properties:
-        status:
-          type: string
-      required:
-        - status
-
+        status: { type: string }
+      required: [status]
+    SuccessResponse:
+      type: object
+      properties:
+        success: { type: boolean }
+      required: [success]
+    Role:
+      type: string
+      enum: [FARMER, TRANSPORTER, WAREHOUSE_ADMIN, RETAILER]
+    OrderStatus:
+      type: string
+      enum: [Placed, Confirmed, Picked Up, In Transit, At Warehouse, Delivered, Rejected]
+    User:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string, format: email }
+        role: { $ref: "#/components/schemas/Role" }
+        organizationId: { type: integer }
+        organizationName: { type: string }
+      required: [id, name, email, role, organizationId, organizationName]
+    LoginInput:
+      type: object
+      properties:
+        email: { type: string, format: email, maxLength: 255 }
+        password: { type: string, minLength: 8, maxLength: 128 }
+      required: [email, password]
+    SignupInput:
+      type: object
+      properties:
+        name: { type: string, minLength: 2, maxLength: 100 }
+        email: { type: string, format: email, maxLength: 255 }
+        password: { type: string, minLength: 8, maxLength: 128 }
+        organizationName: { type: string, minLength: 2, maxLength: 150 }
+        city: { type: string, minLength: 2, maxLength: 100 }
+      required: [name, email, password, organizationName, city]
+    SessionResponse:
+      type: object
+      properties:
+        user: { $ref: "#/components/schemas/User" }
+      required: [user]
+    Order:
+      type: object
+      properties:
+        id: { type: integer }
+        code: { type: string }
+        produce: { type: string }
+        quantityKg: { type: number }
+        pickupCity: { type: string }
+        dropoffCity: { type: string }
+        totalPkr: { type: number }
+        status: { $ref: "#/components/schemas/OrderStatus" }
+        retailerName: { type: string }
+        createdAt: { type: string, format: date-time }
+      required: [id, code, produce, quantityKg, pickupCity, dropoffCity, totalPkr, status, retailerName, createdAt]
+    OrderInput:
+      type: object
+      properties:
+        produce: { type: string, minLength: 2, maxLength: 60 }
+        quantityKg: { type: number, minimum: 1, maximum: 1000000 }
+        pickupCity: { type: string, minLength: 2, maxLength: 100 }
+        dropoffCity: { type: string, minLength: 2, maxLength: 100 }
+        totalPkr: { type: number, minimum: 1, maximum: 1000000000 }
+        retailerName: { type: string, minLength: 2, maxLength: 100 }
+      required: [produce, quantityKg, pickupCity, dropoffCity, totalPkr, retailerName]
+    OrderUpdate:
+      type: object
+      properties:
+        produce: { type: string, minLength: 2, maxLength: 60 }
+        quantityKg: { type: number, minimum: 1, maximum: 1000000 }
+        pickupCity: { type: string, minLength: 2, maxLength: 100 }
+        dropoffCity: { type: string, minLength: 2, maxLength: 100 }
+        totalPkr: { type: number, minimum: 1, maximum: 1000000000 }
+        retailerName: { type: string, minLength: 2, maxLength: 100 }
+    OrderStatusInput:
+      type: object
+      properties:
+        status: { $ref: "#/components/schemas/OrderStatus" }
+      required: [status]
+    OrderPage:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: "#/components/schemas/Order" }
+        total: { type: integer }
+        page: { type: integer }
+        pageSize: { type: integer }
+      required: [data, total, page, pageSize]
+    Shipment:
+      type: object
+      properties:
+        id: { type: integer }
+        orderId: { type: integer }
+        orderCode: { type: string }
+        truckPlate: { type: string }
+        driverName: { type: string }
+        pickupCity: { type: string }
+        dropoffCity: { type: string }
+        status: { $ref: "#/components/schemas/OrderStatus" }
+        temperatureC: { type: number }
+        eta: { type: string, format: date-time }
+        createdAt: { type: string, format: date-time }
+      required: [id, orderId, orderCode, truckPlate, driverName, pickupCity, dropoffCity, status, temperatureC, eta, createdAt]
+    ShipmentInput:
+      type: object
+      properties:
+        orderId: { type: integer, minimum: 1 }
+        truckPlate: { type: string, minLength: 3, maxLength: 20 }
+        driverName: { type: string, minLength: 2, maxLength: 100 }
+        eta: { type: string, format: date-time }
+      required: [orderId, truckPlate, driverName, eta]
+    Alert:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        severity: { type: string, enum: [info, warning, critical] }
+        acknowledged: { type: boolean }
+        createdAt: { type: string, format: date-time }
+      required: [id, title, severity, acknowledged, createdAt]
+    StatusCount:
+      type: object
+      properties:
+        status: { $ref: "#/components/schemas/OrderStatus" }
+        count: { type: integer }
+      required: [status, count]
+    DashboardSummary:
+      type: object
+      properties:
+        orderCount: { type: integer }
+        activeShipments: { type: integer }
+        revenuePkr: { type: number }
+        averageTemperatureC: { type: number }
+        openAlerts: { type: integer }
+        statusCounts:
+          type: array
+          items: { $ref: "#/components/schemas/StatusCount" }
+        recentOrders:
+          type: array
+          items: { $ref: "#/components/schemas/Order" }
+      required: [orderCount, activeShipments, revenuePkr, averageTemperatureC, openAlerts, statusCounts, recentOrders]

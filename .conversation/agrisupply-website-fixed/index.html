@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.open-meteo.com">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>AgriSupply — Smart Cold-Chain Logistics</title>
+<meta name="description" content="Track produce from Punjab farms to Lahore distribution centers with live IoT temperature, GPS and weather heat-risk.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-whatsapp-phone="923079729471">
+<header class="nav"><div class="container">
+  <a href="index.html" class="logo"><i>❄</i>AgriSupply</a>
+  <nav class="links"><a href="#features">Features</a><a href="#workflow">Workflow</a><a href="#roles">Roles</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a><a href="login.html">Login</a></nav>
+  <a href="login.html" class="btn btn-pri">Open Dashboard →</a>
+  <button class="burger" aria-label="Menu">☰</button>
+</div></header>
+
+<section class="hero"><div class="hero-bg"></div><div class="container">
+  <div class="reveal">
+    <span class="tag"><span class="dot"></span> Live across 42 trucks in Punjab</span>
+    <h1>Farm to city,<br><span class="grad">never above 4°C.</span></h1>
+    <p>AgriSupply tracks every kinnow, mango and potato from Okara, Sahiwal and Kasur to Lahore — live GPS, IoT temperature sensors, weather heat-risk and instant alerts in one platform.</p>
+    <div class="cta"><a href="login.html" class="btn btn-pri">Start free demo →</a><a href="#workflow" class="btn">See how it works</a></div>
+  </div>
+  <div class="glass live reveal">
+    <h4><span>Truck LHR-7721</span><span class="pill p-ok">In transit</span></h4>
+    <small class="muted">Kinnow · Sahiwal → Badami Bagh</small>
+    <div class="temp" id="liveTemp">3.8°C</div>
+    <div class="bar"><span id="liveBar" class="bar-initial"></span></div>
+    <div class="row"><span>Humidity</span><b id="liveHum">88%</b></div>
+    <div class="row"><span>ETA</span><b id="liveEta">1h 42m</b></div>
+    <div class="row"><span>Heat risk</span><b id="liveRisk" class="risk-moderate">Moderate · 36°C</b></div>
+  </div>
+</div></section>
+
+<div class="container stats">
+  <div class="glass stat reveal"><h3 data-count="10000" data-suf="+">0</h3><p>Orders tracked</p></div>
+  <div class="glass stat reveal"><h3 data-count="38" data-suf="%">0</h3><p>Less spoilage</p></div>
+  <div class="glass stat reveal"><h3 data-count="120" data-suf="+">0</h3><p>Farms connected</p></div>
+  <div class="glass stat reveal"><h3 data-count="99" data-suf="%">0</h3><p>Uptime, even offline</p></div>
+</div>
+
+<section id="features"><div class="container">
+  <div class="head reveal"><span class="tag">Features</span><h2>Ten modules, <span class="grad">one connected story</span></h2><p>Every order, sensor reading and inspection flows through the same live pipeline.</p></div>
+  <div class="grid">
+    <div class="card reveal"><div class="ico">🌡️</div><h3>IoT Temperature</h3><p>Sensors in cold rooms and trucks stream every 2 seconds with safe-band alerts.</p></div>
+    <div class="card reveal"><div class="ico">🗺️</div><h3>Live Geo-Tracking</h3><p>Trucks move on the map; geofences auto-log arrivals at distribution centers.</p></div>
+    <div class="card reveal"><div class="ico">⛅</div><h3>Weather Heat Risk</h3><p>Forecast for pickup & delivery points with pre-cooling recommendations.</p></div>
+    <div class="card reveal"><div class="ico">📋</div><h3>Kanban Control</h3><p>Drag orders from Placed to Delivered — changes sync to every open screen.</p></div>
+    <div class="card reveal"><div class="ico">✅</div><h3>Quality Inspection</h3><p>Multi-step inspections with photos decide Accept or Reject instantly.</p></div>
+    <div class="card reveal"><div class="ico">🧾</div><h3>Invoices & Reports</h3><p>PDF/CSV invoices with temperature summaries and QR-verified receipts.</p></div>
+    <div class="card reveal"><div class="ico">📶</div><h3>Offline-First</h3><p>Field agents keep working without signal; everything syncs when back online.</p></div>
+    <div class="card reveal"><div class="ico">🔐</div><h3>Role Security</h3><p>Farmer, Transporter, Warehouse Admin and Retailer each see only what they should.</p></div>
+  </div>
+</div></section>
+
+<section id="workflow" class="surface-alt"><div class="container">
+  <div class="head reveal"><span class="tag">Workflow</span><h2>How a crate travels</h2></div>
+  <div class="flow">
+    <div class="glass step reveal"><h4>Order placed</h4><p>Retailer orders 2,000 kg kinnow.</p></div>
+    <div class="glass step reveal"><h4>Confirmed</h4><p>Warehouse drags card to Confirmed.</p></div>
+    <div class="glass step reveal"><h4>In transit</h4><p>Truck tracked live with temp stream.</p></div>
+    <div class="glass step reveal"><h4>Inspected</h4><p>Quality check on arrival.</p></div>
+    <div class="glass step reveal"><h4>Invoiced</h4><p>PDF invoice + receipt generated.</p></div>
+  </div>
+</div></section>
+
+<section><div class="container split">
+  <img class="reveal" src="assets/img/coldroom.jpg" alt="Cold storage warehouse with produce crates" loading="lazy">
+  <div class="reveal"><span class="tag">Why AgriSupply</span><h2 class="headline-large">Up to 40% of produce is lost before it reaches the city.</h2>
+    <p class="muted">We close the gaps with data — so farmers earn more and retailers get fresher stock.</p>
+    <ul class="checks"><li>Instant alerts when a truck warms up</li><li>Automatic arrival detection via geofences</li><li>Loss-rate & temperature variance metrics</li><li>Works in low-signal rural areas</li></ul></div>
+</div></section>
+
+<section id="roles" class="surface-alt"><div class="container roles">
+  <div class="head reveal"><span class="tag">Built for everyone</span><h2>Four roles, one platform</h2></div>
+  <div class="grid">
+    <div class="card reveal"><div class="ico ico-centered">👨‍🌾</div><h3>Farmer</h3><p>List batches, see orders & quality reports.</p></div>
+    <div class="card reveal"><div class="ico ico-centered">🚚</div><h3>Transporter</h3><p>Assigned trips, status updates, offline log.</p></div>
+    <div class="card reveal"><div class="ico ico-centered">🏭</div><h3>Warehouse Admin</h3><p>Full control, inspections, reports & metrics.</p></div>
+    <div class="card reveal"><div class="ico ico-centered">🛒</div><h3>Retailer</h3><p>Place orders, track them, download invoices.</p></div>
+  </div>
+</div></section>
+
+<section id="pricing"><div class="container">
+  <div class="head reveal"><span class="tag">Pricing</span><h2>Simple plans in PKR</h2></div>
+  <div class="grid">
+    <div class="card reveal"><h3>Starter</h3><h2 class="price">PKR 15,000<small class="price-period">/mo</small></h2><ul class="checks"><li>5 trucks</li><li>Temperature alerts</li><li>Basic reports</li></ul><a href="login.html" class="btn plan-action">Choose</a></div>
+    <div class="card reveal featured-plan"><span class="pill p-ok">Most popular</span><h3 class="growth-title">Growth</h3><h2 class="price">PKR 45,000<small class="price-period">/mo</small></h2><ul class="checks"><li>25 trucks</li><li>Live map & geofences</li><li>Weather heat risk</li><li>Kanban & inspections</li></ul><a href="login.html" class="btn btn-pri plan-action">Choose</a></div>
+    <div class="card reveal"><h3>Enterprise</h3><h2 class="price">Custom</h2><ul class="checks"><li>Unlimited fleet</li><li>Multi-organization</li><li>Dedicated support</li></ul><a href="#contact" class="btn plan-action">Contact us</a></div>
+  </div>
+</div></section>
+
+<section class="surface-alt"><div class="container">
+  <div class="head reveal"><span class="tag">Stories</span><h2>Trusted across Punjab</h2></div>
+  <div class="grid">
+    <div class="glass testi reveal"><p>"Our kinnow rejection rate dropped from 18% to 6% in one season."</p><b>Muhammad Aslam · Farmer, Sargodha</b></div>
+    <div class="glass testi reveal"><p>"I know exactly when trucks arrive at Badami Bagh. No more calls."</p><b>Ayesha Khan · Warehouse Admin, Lahore</b></div>
+    <div class="glass testi reveal"><p>"Invoices with temperature proof ended every dispute with suppliers."</p><b>Bilal Ahmed · Retail chain owner</b></div>
+  </div>
+</div></section>
+
+<section id="contact"><div class="container split">
+  <div class="reveal"><span class="tag">Contact</span><h2 class="headline-large">Let's cool your supply chain.</h2><p class="muted">📍 Gulberg III, Lahore<br>✉️ hello@agrisupply.pk<br><a class="wa-contact" href="https://wa.me/?text=Hi%20AgriSupply%2C%20I%20need%20help%20with%20cold-chain%20logistics." target="_blank" rel="noopener noreferrer">📞 WhatsApp message</a></p></div>
+  <form id="contactForm" class="glass reveal contact-form" novalidate>
+    <div class="f"><label for="cn">Name</label><input id="cn" maxlength="80" autocomplete="name"><span class="err"></span></div>
+    <div class="f"><label for="ce">Email</label><input id="ce" type="email" maxlength="120" autocomplete="email"><span class="err"></span></div>
+    <div class="f"><label for="cm">Message</label><textarea id="cm" rows="4" maxlength="1000"></textarea><span class="err"></span></div>
+    <button class="btn btn-pri">Send message</button>
+  </form>
+</div></section>
+
+<footer><div class="container"><span class="logo"><i>❄</i>AgriSupply</span><span>© 2026 AgriSupply. Made in Pakistan 🇵🇰</span></div></footer>
+<script src="js/app.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "AgriSupply Cold-Chain"
+description = "A full-stack cold-chain operations app for Punjab produce supply teams to manage orders, shipments, sensor alerts, inspections, and role-specific workflows."
+version = "1.0.0"
+id = "artifacts/agrisupply"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20162
+
+[services.development]
+run = "pnpm --filter @workspace/agrisupply run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/agrisupply", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/agrisupply/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20162"
+BASE_PATH = "/"

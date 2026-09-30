@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:">
+<title>Login — AgriSupply</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-whatsapp-phone="923079729471">
+<div class="auth">
+  <div class="auth-art"><div><a href="index.html" class="logo"><i>❄</i>AgriSupply</a><h2 class="auth-title">Every degree matters.</h2><p class="muted">Sign in to monitor trucks, cold rooms and orders in real time.</p></div></div>
+  <div class="auth-box"><div class="glass">
+    <h2>Welcome back</h2><p class="muted">Log in or create your account</p>
+    <div class="tabs"><button class="on" data-t="login">Login</button><button data-t="signup">Sign up</button></div>
+    <form id="authForm" novalidate>
+      <div class="f" id="nameF" hidden><label for="nm">Full name</label><input id="nm" maxlength="80" autocomplete="name"><span class="err"></span></div>
+      <div class="f"><label for="em">Email</label><input id="em" type="email" maxlength="120" autocomplete="email"><span class="err"></span></div>
+      <div class="f"><label for="pw">Password</label><div class="password-control"><input id="pw" type="password" maxlength="64" autocomplete="current-password"><button class="password-toggle" id="togglePassword" type="button" aria-label="Show password" aria-controls="pw" aria-pressed="false">Show</button></div><span class="err"></span></div>
+      <div class="f" id="roleF" hidden><label for="rl">Role</label><select id="rl"><option>Farmer</option><option>Transporter</option><option>Warehouse Admin</option><option>Retailer</option></select></div>
+      <button class="btn btn-pri auth-submit" id="sub">Login</button>
+    </form>
+    <p class="auth-help">Quick demo login</p>
+    <div class="demo"><button class="btn" data-r="Farmer">👨‍🌾 Farmer</button><button class="btn" data-r="Transporter">🚚 Transporter</button><button class="btn" data-r="Warehouse Admin">🏭 Admin</button><button class="btn" data-r="Retailer">🛒 Retailer</button></div>
+  </div></div>
+</div>
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

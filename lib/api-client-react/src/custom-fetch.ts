@@ -17,6 +17,26 @@ const DEFAULT_JSON_ACCEPT = "application/json, application/problem+json";
 
 let _baseUrl: string | null = null;
 let _authTokenGetter: AuthTokenGetter | null = null;
+let _refreshInFlight: Promise<boolean> | null = null;
+
+function refreshSession(): Promise<boolean> {
+  if (!_refreshInFlight) {
+    _refreshInFlight = fetch("/api/auth/refresh", {
+      method: "POST",
+      credentials: "same-origin",
+    })
+      .then((response) => response.ok)
+      .catch(() => false)
+      .finally(() => {
+        _refreshInFlight = null;
+      });
+  }
+  return _refreshInFlight;
+}
+
+function isSessionEndpoint(url: string): boolean {
+  return /\/auth\/(login|signup|refresh|logout)(?:\?|$)/.test(url);
+}
 
 /**
  * Set a base URL that is prepended to every relative request URL
@@ -360,7 +380,23 @@ export async function customFetch<T = unknown>(
 
   const requestInfo = { method, url: resolveUrl(input) };
 
-  const response = await fetch(input, { ...init, method, headers });
+  const requestInit: RequestInit = {
+    ...init,
+    method,
+    headers,
+    credentials: init.credentials ?? "same-origin",
+  };
+  const fetchInput = isRequest(input) ? input.clone() : input;
+  let response = await fetch(fetchInput, requestInit);
+
+  if (
+    response.status === 401 &&
+    typeof window !== "undefined" &&
+    !isSessionEndpoint(requestInfo.url) &&
+    await refreshSession()
+  ) {
+    response = await fetch(isRequest(input) ? input.clone() : input, requestInit);
+  }
 
   if (!response.ok) {
     const errorData = await parseErrorBody(response, method);
